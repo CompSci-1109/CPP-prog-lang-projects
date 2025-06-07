@@ -1,6 +1,7 @@
 #include<iostream>
 #include<cstdlib>
 #include<ctime>
+#include<limits>
 using namespace std;
 class beginGame
 {
@@ -22,7 +23,22 @@ class beginGame
 			cout<<"Test your wit.";
 			cout<<"\nPick Any number from 1 to 100: \n";
 			do{
-				cin>>humannum;
+				//cin>>humannum;
+				
+				if (!(cin>>humannum))
+				{
+					cout<<"The Processor speaks: Calm, my Seeker. You're so close to the answer.\n Please enter only numbers.\n";
+					cin.clear();
+					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+					continue;
+				}
+				
+				if (humannum < 1 || humannum > 100)
+				{
+					cout<<"The Processor warns: O Seeker! I plead you to not bend the rules. Enter numbers only between 1 and 100.\n";
+					continue;
+				}
+				
 				tries++;
 				
 				if (humannum > compnum)
