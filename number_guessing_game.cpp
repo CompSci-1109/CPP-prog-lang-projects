@@ -1,6 +1,6 @@
 #include<iostream>   //for input and output (cin, cout).
 #include<cstdlib>   //for rand() and system("color").
-#include<ctime>    //for time() to seed random number generator (the srand() thing).
+#include<ctime>   //for time() to seed random number generator (the srand() thing).
 #include<limits>  //for input buffer handling (input validation in error handling).
 #include<string> //for using string types.
 #include<algorithm> //for remove_if() function.
@@ -9,7 +9,7 @@ using namespace std;
 //class to handle number guessing game.
 class beginGame
 {
-	int humannum, compnum, tries; // humannum = player's guess, compnum = number to guess, tries = number of attempts.
+	int num, compnum, tries; // num = player's guess, compnum = number to guess, tries = number of attempts.
 	public:
 		
 		// gameStart() function starts the game and generates the computer's secret number.
@@ -22,8 +22,8 @@ class beginGame
 			cout<<"\n\nCan You Outwit this Wired Beast?\n";
 			
 			// srand(), time() sets random seed and generate number between 1 and 100.
-			srand(time(0));
-			compnum= (rand() %100) + 1;  
+			srand(time(0));       // Set random seed using current time.
+			compnum= (rand() %100) + 1;  // Computer picks a number between 1 and 100
 			tries=0;            // Reset tries to 0.
 		}
 		
@@ -46,7 +46,6 @@ class beginGame
 				bool hasDigit= false;
 				bool hasAlpha= false;
 				bool hasSymbol= false;
-			  //bool hasSpace= false;
 				
 				 // Analyze input character by character
 				  for(int i=0; i<input.length(); ++i)
@@ -61,38 +60,48 @@ class beginGame
 					}
 					else if (!isalnum (input[i]))
 					{
-						hasSymbol=true;
+						if (!(input[i]=='-' && i==0))
+						{
+							hasSymbol=true;
+						}
 					}
 			      }
 			      
-                 //for handling user inputs like "90ab"
-				 if(hasDigit && hasAlpha)
+                 //for handling user inputs like "90ab","ab(*&", "ads545*&^", "565*&("
+				 if((hasAlpha && hasSymbol) || (hasAlpha && hasDigit && hasSymbol) || (hasDigit && hasSymbol))
+				 {
+				 	system("color C5"); //light red and purple
+				 	cout<<"The processor stares: Did I stutter? I. NEED. PURELY. NUMBERS. BETWEEN 1 TO 100\n";
+				 	continue;
+				 }
+				 
+				else if(hasDigit && hasAlpha)
 				 {
 				 	//changes color and shows the error.
-					system("color 56");
-			  		cout<<"The Processor says: No Mixing. I need pure numbers. ";
+					system("color 56"); //purple and yellow
+			  		cout<<"The Processor says: No Mixing. I need pure numbers.\n ";
 			  		continue;
 				 }
+				  //for handling symbols
+				else if(hasSymbol && !hasDigit && !hasAlpha)
+				{
+					system("color C7"); // light red and white
+					cout<<"The Processor loses its calm: Did I say I need only numbers?\n";
+					continue;
+				}
 				 //for handling inputs like "ojkskd"(if user input was a string)
-				 else if(hasAlpha && !hasDigit)
+				 else if(hasAlpha && !hasDigit && !hasSymbol)
 				 {
-				 	system("color E1");
+				 	system("color E1"); //pale yellow and blue
 					cout<<"The Processor speaks: Calm, O Seeker. You're so close to the answer.\n Please enter only numbers.\n";
 					continue;
 				 }
-				 //for handling symbols or mixed letters and nos with symbols
-				else if(hasSymbol)
-				{
-					system("color C7");
-					cout<<"The Processor stares:  Did I stutter? I. NEED. PURELY. NUMBERS. BETWEEN 1 TO 100.";
-					continue;
-				}
-				 
-				 humannum= atoi(input.c_str());  // Convert string to integer safely (since it's already checked for digits).
+				
+				 num= atoi(input.c_str());  // Convert string to integer safely (since it's already checked for digits).
 				
 				
 				// Check if number is within the allowed range.
-				if (humannum < 1 || humannum > 100)
+				if (num < 1 || num > 100)
 				{
 					system("color B2");
 					cout<<"The Processor warns: O Seeker! I plead you to not bend the rules. Enter numbers only between 1 and 100.\n";
@@ -103,30 +112,30 @@ class beginGame
 				
 				
 				// Compare user's guess with the computer's number
-				if (humannum > compnum)
+				if (num > compnum)
 				{
 					system("color 60");
-					cout<<"\nyour guess is:"<<humannum<<endl;
+					cout<<"\nyour guess is:"<<num<<endl;
 					cout<<"\a";
 					cout<<"\nThe Processor Scoffs: Too High, O Seeker. Try Again.\n\n"<<endl;
 				}
-				else if (humannum < compnum)
+				else if (num < compnum)
 				{
 					system ("color 17");
-					cout<<"Your guess was:"<<humannum<<endl;
+					cout<<"Your guess was:"<<num<<endl;
 					cout<<"\nThe Processor Buzzes In Disapointment: Too Low,Dear Seeker. Try Again.\n\n"<<endl;
 				}
 				else
 				{
 					system("color 2E");
-					cout<<"your guess:"<<humannum<<endl;
+					cout<<"your guess:"<<num<<endl;
 					cout<<"\nPraises Be Upon You, O Seeker!";
 					cout<<"\nYour Intelligence has conquered The Digitron.";
 					cout<<"\nThe Mess of Wires Thus Tremble & Bow to You.";
 					cout<<"\nYou won over The Digitron in: "<<tries<<" tries.";
 				}
-			}while (humannum != compnum);    // Loop continues until correct guess
-		}		
+			}while (num != compnum);    // Loop continues until correct guess
+	 	}		
 };
 int main()
 {
