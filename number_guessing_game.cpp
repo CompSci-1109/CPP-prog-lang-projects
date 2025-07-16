@@ -9,7 +9,7 @@ using namespace std;
 //class to handle number guessing game.
 class beginGame
 {
-	int num, compnum, tries; // num = player's guess, compnum = number to guess, tries = number of attempts.
+	int num, compnum, tries; // num = player's guess, compnum = number guessed by computer, tries = number of attempts.
 	public:
 		
 		// gameStart() function starts the game and generates the computer's secret number.
@@ -37,7 +37,7 @@ class beginGame
 			
 			// Below is the Main loop until user guesses the correct number.
 			do{
-				cout<<"\nYour guess:";
+				cout<<"\nYour Guess:";
 				getline(cin>> ws, input); //this reads full input even with space given.
                  
                  // the below functions trim the space if mixed input like "abc 123" has a space entered in between.
@@ -60,7 +60,7 @@ class beginGame
 					}
 					else if (!isalnum (input[i]))
 					{
-						if (!(input[i]=='-' && i==0))
+						if (!(input[i]=='-' || input[i]=='+' && i==0))
 						{
 							hasSymbol=true;
 						}
@@ -109,30 +109,58 @@ class beginGame
 				}
 				
 				tries++;   // Count the pure numbers (like 0, 1, 10 etc.) as a valid attempt.
-				
-				
+				switch (tries)
+				  {
+		            case 3:
+		              cout << "The Processor murmurs: Still fumbling in the dark, are we?\n";
+		               break;
+		         	case 6:
+		             cout << "The Processor glares: The wires grow restless. Choose wisely.\n";
+		              break;
+		    	    case 8:
+		             cout << "The Processor trembles: You are near the edge, O Seeker.\n";
+		              break;
+		    	    case 9:
+		             cout << "The Processor roars: One. Last. Attempt. Don't disappoint.\n";
+		              break;
+                  }
 				// Compare user's guess with the computer's number
 				if (num > compnum)
 				{
-					system("color 60");
+					system("color 60"); //deep yellow bg and black font. 
 					cout<<"\nyour guess is:"<<num<<endl;
 					cout<<"\a";
-					cout<<"\nThe Processor Scoffs: Too High, O Seeker. Try Again.\n\n"<<endl;
+					cout<<"\nThe Processor Scoffs: Too High, O Seeker. Try Again."<<endl;
 				}
 				else if (num < compnum)
 				{
-					system ("color 17");
+					system ("color 17"); //deep blue bg and white font.
 					cout<<"Your guess was:"<<num<<endl;
-					cout<<"\nThe Processor Buzzes In Disapointment: Too Low,Dear Seeker. Try Again.\n\n"<<endl;
+					cout<<"\nThe Processor Buzzes In Disapointment: Too Low,Dear Seeker. Try Again."<<endl;
 				}
 				else
 				{
-					system("color 2E");
-					cout<<"your guess:"<<num<<endl;
+					system("color 2E"); //green bg and light yellow font.
+					cout<<"Your guess:"<<num<<endl;
 					cout<<"\nPraises Be Upon You, O Seeker!";
 					cout<<"\nYour Intelligence has conquered The Digitron.";
 					cout<<"\nThe Mess of Wires Thus Tremble & Bow to You.";
 					cout<<"\nYou won over The Digitron in: "<<tries<<" tries.";
+					return; 
+				}
+				//show how many attempts are left
+				if (tries < 10)
+	             {
+	             	cout<<"The Processor hurries:Quick! you have only "<<(10-tries)<<" attempts left.\n";
+				 }
+				
+				if (tries==10)
+				{
+					system("color 0A");
+					cout<<"The Processor declares: Alas, O Seeker! You have used up all 10 chances.\n";
+					cout<<"It hums with triumph, but does respect your effort.\n";
+					cout<<"The Number was: "<<compnum<<".\n";
+					break;
 				}
 			}while (num != compnum);    // Loop continues until correct guess
 	 	}		
